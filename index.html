@@ -27,6 +27,13 @@
     footer{display:flex;justify-content:space-between;gap:20px;margin-top:22px;color:#e0e3e5;font:10px Consolas,monospace;letter-spacing:.03em}
     @media(max-width:700px){.shell{padding:0 19px 45px}header{height:68px}.header-note{font-size:9px}main{padding-top:35px}.intro{font-size:14px}.habit-card{padding:19px;align-items:flex-start;flex-direction:column;gap:18px;margin-top:22px}.habit-name{font-size:21px}.date-editor{width:100%;justify-content:space-between}.stats{grid-template-columns:repeat(2,1fr);gap:9px}.stat{padding:14px 15px;min-height:81px}.stat-value{font-size:23px}.milestones{margin-top:18px;padding:18px 15px}.milestone-heading{font-size:21px}.milestone-head{align-items:flex-start;flex-direction:column;gap:8px}.milestone-nudge{text-align:left;max-width:none}.milestone-grid{grid-template-columns:repeat(2,1fr);gap:8px}.milestone{min-height:110px;padding:13px}.tracker{margin-top:16px;padding:20px 16px 21px}.tracker-head{margin-bottom:19px}.week{grid-template-columns:29px repeat(7,minmax(0,1fr));gap:5px}.week-label{font-size:7px;padding-top:25px}.week-label small{font-size:7px}.day{gap:6px}.day-name{font-size:8px}.day button{min-height:55px;aspect-ratio:auto;border-radius:10px;gap:5px}.day button .num{font-size:12px}.day button .day-cue{font-size:5px;letter-spacing:0}.day button .check{width:11px;height:11px;right:4px;top:4px}.weeks{gap:14px}.legend{gap:10px 13px;font-size:10px}.bottom-row{align-items:flex-start;flex-direction:column;gap:10px}.storage-note{order:2}footer{font-size:9px;flex-direction:column;gap:7px}.quote-toast{bottom:14px;padding:14px 16px;font-size:15px}}
     @media(max-width:380px){.shell{padding-left:13px;padding-right:13px}.tracker{padding-left:11px;padding-right:11px}.week{grid-template-columns:25px repeat(7,minmax(0,1fr));gap:4px}.day button{min-height:52px}.day-name{font-size:7px}.header-note{letter-spacing:.04em}.day button .day-cue{font-size:4.5px}}
+    .day button.tone-0:not(.completed):not(.today):not(.missed){background:linear-gradient(145deg,#fff2cc,#fff9e9);border-color:#ecddb5}.day button.tone-0:not(.completed):not(.today):not(.missed) .day-cue{color:#735619}
+    .day button.tone-1:not(.completed):not(.today):not(.missed){background:linear-gradient(145deg,#ffe8e5,#fff4f0);border-color:#efd3ce}.day button.tone-1:not(.completed):not(.today):not(.missed) .day-cue{color:#804b45}
+    .day button.tone-2:not(.completed):not(.today):not(.missed){background:linear-gradient(145deg,#e4f1e5,#f3f8ec);border-color:#d1e4d2}.day button.tone-2:not(.completed):not(.today):not(.missed) .day-cue{color:#3c6548}
+    .day button.tone-3:not(.completed):not(.today):not(.missed){background:linear-gradient(145deg,#e6efff,#f5f7ff);border-color:#d7e0f2}.day button.tone-3:not(.completed):not(.today):not(.missed) .day-cue{color:#485d84}
+    .day button.tone-4:not(.completed):not(.today):not(.missed){background:linear-gradient(145deg,#efe8ff,#faf6ff);border-color:#dfd4f0}.day button.tone-4:not(.completed):not(.today):not(.missed) .day-cue{color:#675287}
+    .day button.tone-5:not(.completed):not(.today):not(.missed){background:linear-gradient(145deg,#fbe9d8,#fff5e9);border-color:#eed8c1}.day button.tone-5:not(.completed):not(.today):not(.missed) .day-cue{color:#795b3a}
+    @media(max-width:380px){.day button .day-cue{font-size:5px;letter-spacing:-.04em}}
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
   </style>
 </head>
@@ -59,7 +66,7 @@
         <div class="tracker-head"><div><h2 class="tracker-title" id="trackerTitle">Your 90-day calendar</h2><div class="tracker-sub" id="calendarSub">Tap once to complete a day. Completed days stay checked.</div></div><div class="ring-wrap" aria-label="Completion progress"><div class="ring"><svg viewBox="0 0 48 48" aria-hidden="true"><circle class="ring-bg" cx="24" cy="24" r="20"/><circle class="ring-fill" id="ringFill" cx="24" cy="24" r="20" stroke-dasharray="125.66" stroke-dashoffset="125.66"/></svg><div class="ring-number" id="ringNumber">0%</div></div><div class="ring-caption">of your 90 days</div></div></div>
         <div class="legend" aria-label="Calendar key"><span><i class="key done"></i>Done</span><span><i class="key today"></i>Today</span><span><i class="key missed"></i>Missed</span><span><i class="key future"></i>Upcoming</span></div>
         <div class="weeks" id="weeks" role="group" aria-label="90 daily habit checkboxes"></div>
-        <div class="bottom-row"><div class="encouragement" id="encouragement">A fresh page. Your first check is waiting.</div><div class="storage-note"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 17s6-3 6-8V4l-6-2-6 2v5c0 5 6 8 6 8Z" stroke="currentColor" stroke-width="1.4"/><path d="m7.5 9.5 1.6 1.6 3.4-3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Saved privately on this device</div><button class="reset" id="resetButton" type="button">Clear all progress</button></div>
+        <div class="bottom-row"><div class="encouragement" id="encouragement">A fresh page. Your first check is waiting.</div><div class="storage-note"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 17s6-3 6-8V4l-6-2-6 2v5c0 5 6 8 6 8Z" stroke="currentColor" stroke-width="1.4"/><path d="m7.5 9.5 1.6 1.6 3.4-3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Saved privately on this device</div></div>
       </section>
     </main>
     <footer><span>90 days. One day at a time.</span><span>Made for the person you’re becoming.</span></footer>
@@ -74,7 +81,17 @@
       const parse=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
       const addDays=(d,n)=>{const v=new Date(d);v.setDate(v.getDate()+n);return v};
       const dateLabel=d=>new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric'}).format(d);
-      const dayCues=['SHOW UP','OWN IT','STAY TRUE','ONE STEP','IN CONTROL','KEEP GOING','MAKE IT COUNT'];
+      const dayCues=[
+        'KEEP PROMISE','OWN TODAY','START STRONG','DO THE WORK','CHOOSE FOCUS','STAY READY','BE THE PROOF','ACT ON PURPOSE','SHOW UP','KEEP STEADY',
+        'MAKE IT COUNT','ONE MORE WIN','PICK PURPOSE','STAY THE PATH','TAKE CONTROL','TRUST THE PLAN','NO SHORTCUTS','GO ALL IN','BE CONSISTENT','BUILD THE EDGE',
+        'HONOR YOUR WORD','WORK WITH HEART','HOLD THE LINE','MAKE PROGRESS','STAY COMMITTED','WIN THIS HOUR','OWN THE MOMENT','DO IT ANYWAY','CHOOSE BETTER','DISCIPLINE FIRST',
+        'MOVE THE NEEDLE','STAY IN CHARGE','FOCUS FORWARD','MAKE A CHOICE','NO EXCUSES','BE UNSTOPPABLE','PROVE IT DAILY','KEEP BUILDING','PRESS ON','STAY FOCUSED',
+        'FOLLOW THROUGH','TAKE THE STEP','BE INTENTIONAL','LOCK IN','GO AGAIN','STAND FIRM','BE PATIENT','KEEP YOUR PACE','SHOW COURAGE','CHOOSE GROWTH',
+        'DO THE NEXT','STAY DRIVEN','CONTROL THE URGE','AIM WITH PURPOSE','MAKE IT HAPPEN','LEAD YOURSELF','FIND YOUR GRIT','STAY ON TRACK','SHOW YOURSELF','GUARD YOUR FOCUS',
+        'KEEP MOVING','STICK WITH IT','PRACTICE PATIENCE','SHOW UP AGAIN','SET THE TONE','TAKE THE LEAD','OWN THE EFFORT','STAY RELENTLESS','CHOOSE ACTION','BUILD SELF-TRUST',
+        'HARD THINGS FIRST','GROW YOUR GRIT','ACT WITH COURAGE','DO NOT DRIFT','MAKE TIME COUNT','STAY TRUE','STEP INTO IT','KEEP COMMITMENT','LESS TALK, MORE','TURN UP',
+        'STAY RESOLUTE','PROTECT YOUR WHY','FINISH STRONG','CHOOSE THE HARD','SHOW YOUR WORK','FUTURE IN MOTION','AIM HIGH','KEEP THE FAITH','RISE AGAIN','NEVER SETTLE'
+      ];
       const quotes=[
         'Discipline is choosing what you want most over what feels easiest now.',
         'Small choices. Stronger standards.',
@@ -183,8 +200,8 @@
           if(i%7===0){currentWeek=document.createElement('div');currentWeek.className='week';currentWeek.setAttribute('role','group');currentWeek.setAttribute('aria-label',`Week ${Math.floor(i/7)+1}`);const weekStart=Math.floor(i/7)*7,weekCount=store.completed.filter(n=>Math.floor(n/7)===Math.floor(i/7)).length,weekTotal=Math.min(7,TOTAL-weekStart),label=document.createElement('div');label.className='week-label';label.innerHTML=`<span>W${String(Math.floor(i/7)+1).padStart(2,'0')}</span><small>${weekCount}/${weekTotal}</small>`;currentWeek.append(label);weeks.append(currentWeek)}
           const d=addDays(start,i),month=d.getMonth(),completed=store.completed.includes(i);
           if(month!==prevMonth){const tag=document.createElement('div');tag.className='month-tag visible';tag.style.gridColumn='2 / -1';tag.textContent=new Intl.DateTimeFormat(undefined,{month:'long',year:'numeric'}).format(d);currentWeek.append(tag);prevMonth=month}
-          const cell=document.createElement('div');cell.className='day';const wd=document.createElement('span');wd.className='day-name';wd.textContent=new Intl.DateTimeFormat(undefined,{weekday:'short'}).format(d);const cue=completed?'KEPT IT':dayCues[i%dayCues.length],b=document.createElement('button');b.type='button';b.setAttribute('role','checkbox');b.setAttribute('aria-checked',completed);b.setAttribute('aria-label',`Day ${i+1}, ${new Intl.DateTimeFormat(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'}).format(d)} — ${completed?'completed and locked':cue}`);b.dataset.index=i;b.disabled=completed;
-          const isToday=iso(d)===iso(today), future=iso(d)>iso(today), missed=iso(d)<iso(today);b.className=completed?'completed':'';if(isToday)b.classList.add('today');if(future)b.classList.add('future');if(missed&&!completed)b.classList.add('missed');if(nowIndex<0||nowIndex>=TOTAL)b.classList.add('future');
+          const cell=document.createElement('div');cell.className='day';const wd=document.createElement('span');wd.className='day-name';wd.textContent=new Intl.DateTimeFormat(undefined,{weekday:'short'}).format(d);const cue=dayCues[i],b=document.createElement('button');b.type='button';b.setAttribute('role','checkbox');b.setAttribute('aria-checked',completed);b.setAttribute('aria-label',`Day ${i+1}, ${new Intl.DateTimeFormat(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'}).format(d)} — ${cue}${completed?', completed and locked':''}`);b.dataset.index=i;b.disabled=completed;
+          const isToday=iso(d)===iso(today), future=iso(d)>iso(today), missed=iso(d)<iso(today);b.className=completed?'completed':'';b.classList.add(`tone-${i%6}`);if(isToday)b.classList.add('today');if(future)b.classList.add('future');if(missed&&!completed)b.classList.add('missed');if(nowIndex<0||nowIndex>=TOTAL)b.classList.add('future');
           b.innerHTML=`<span class="num">${d.getDate()}</span><span class="day-cue">${cue}</span><svg class="check" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m4 10 4 4 8-8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
           b.addEventListener('click',()=>{const idx=Number(b.dataset.index);if(store.completed.includes(idx))return;store.completed.push(idx);save();showQuote(store.completed.length);build()});cell.append(wd,b);currentWeek.append(cell);
         }
@@ -208,7 +225,6 @@
       function showQuote(completedCount){const toast=$('quoteToast'),milestone=[7,30,60,90].includes(completedCount);toast.textContent=milestone?`MILESTONE UNLOCKED · ${completedCount} days. ${quotes[completedCount-1]}`:quotes[completedCount-1];toast.classList.add('show');toast.setAttribute('aria-hidden','false');clearTimeout(quoteTimer);quoteTimer=setTimeout(()=>{toast.classList.remove('show');toast.setAttribute('aria-hidden','true')},30000)}
       $('habitName').addEventListener('input',e=>{store.habit=e.target.value;save()});$('habitName').addEventListener('change',build);
       $('startDate').addEventListener('change',e=>{if(!e.target.value)return;store.start=e.target.value;save();build()});
-      $('resetButton').addEventListener('click',()=>{if(window.confirm('Clear all 90 days of progress? This cannot be undone.')){store.completed=[];save();build()}});
       build();
     })();
   </script>
