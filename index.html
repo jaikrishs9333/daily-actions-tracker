@@ -8,7 +8,7 @@
   <title>Daily Actions — your 90-day habit tracker</title>
   <style>
     :root{--paper:#f5f4ee;--card:#fffefa;--ink:#252a25;--muted:#7b8077;--line:#e7e8df;--green:#526f58;--green-soft:#e4ece1;--lime:#d4e47a;--amber:#f4ead2;--amber-ink:#8c713a;--miss:#f4e6df;--shadow:0 14px 42px #343a2810}
-    *{box-sizing:border-box} body{margin:0;background:linear-gradient(135deg,#f5f4eee8,#f5f4eef2),url('habit-background.png') center/cover fixed;color:var(--ink);font-family:'Segoe UI',Arial,sans-serif;-webkit-font-smoothing:antialiased}
+    *{box-sizing:border-box} body{position:relative;isolation:isolate;margin:0;background:var(--paper);color:var(--ink);font-family:'Segoe UI',Arial,sans-serif;-webkit-font-smoothing:antialiased}body::before{content:'';position:fixed;inset:-8px;z-index:-1;background:url('habit-background.png') center/cover no-repeat;opacity:.14;filter:blur(7px);pointer-events:none}
     button,input{font:inherit} button{cursor:pointer} .shell{max-width:1120px;margin:auto;padding:0 36px 72px}
     header{height:82px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e5e5dc}
     .brand{display:flex;align-items:center;gap:11px;color:var(--ink);text-decoration:none;font-size:15px;font-weight:700;letter-spacing:-.03em}.brand-mark{width:29px;height:29px;display:grid;place-items:center;background:var(--green);color:white;border-radius:9px}.brand-mark svg{width:17px}
@@ -34,73 +34,3 @@
       <a class="brand" href="#" aria-label="Daily Actions home"><span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 12.5 4 4L18.5 8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Daily Actions</a>
       <div class="header-note"><span class="live-dot"></span> a little, every day</div>
     </header>
-    <main>
-      <div class="eyebrow">your next 90 days</div>
-      <h1>Small promises.<br>Kept daily.</h1>
-      <p class="intro">One habit, one day at a time. Mark each day you show up, and let the little wins add up to something wonderful.</p>
-      <section class="habit-card" aria-label="Habit settings">
-        <div class="habit-copy"><label class="field-label" for="habitName">I’m showing up for</label><input class="habit-name" id="habitName" maxlength="48" value="My Daily Habit" aria-label="Habit name"><div class="dates" id="dateRange"></div></div>
-        <div class="date-editor"><label for="startDate">Start date</label><input class="start-date" id="startDate" type="date" value="2026-10-04"><span class="edit-note">Your progress stays saved</span></div>
-      </section>
-      <section class="stats" aria-label="Your progress">
-        <div class="stat"><div class="stat-label">Days completed</div><div class="stat-value" id="completedStat">0 <small>/ 90</small></div></div>
-        <div class="stat"><div class="stat-label">Current streak</div><div class="stat-value" id="currentStat">0 <small>days</small></div></div>
-        <div class="stat"><div class="stat-label">Longest streak</div><div class="stat-value" id="longestStat">0 <small>days</small></div></div>
-        <div class="stat"><div class="stat-label">Days to go</div><div class="stat-value" id="remainingStat">90 <small>left</small></div></div>
-      </section>
-      <section class="tracker" aria-labelledby="trackerTitle">
-        <div class="tracker-head"><div><h2 class="tracker-title" id="trackerTitle">Your 90-day calendar</h2><div class="tracker-sub" id="calendarSub">Tap once to complete a day. Completed days stay checked.</div></div><div class="ring-wrap" aria-label="Completion progress"><div class="ring"><svg viewBox="0 0 48 48" aria-hidden="true"><circle class="ring-bg" cx="24" cy="24" r="20"/><circle class="ring-fill" id="ringFill" cx="24" cy="24" r="20" stroke-dasharray="125.66" stroke-dashoffset="125.66"/></svg><div class="ring-number" id="ringNumber">0%</div></div><div class="ring-caption">of your 90 days</div></div></div>
-        <div class="legend" aria-label="Calendar key"><span><i class="key done"></i>Done</span><span><i class="key today"></i>Today</span><span><i class="key missed"></i>Missed</span><span><i class="key future"></i>Upcoming</span></div>
-        <div class="weeks" id="weeks" role="group" aria-label="90 daily habit checkboxes"></div>
-        <div class="bottom-row"><div class="encouragement" id="encouragement">A fresh page. Your first check is waiting.</div><div class="storage-note"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 17s6-3 6-8V4l-6-2-6 2v5c0 5 6 8 6 8Z" stroke="currentColor" stroke-width="1.4"/><path d="m7.5 9.5 1.6 1.6 3.4-3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Saved privately on this device</div><button class="reset" id="resetButton" type="button">Clear all progress</button></div>
-      </section>
-    </main>
-    <footer><span>90 days. One day at a time.</span><span>Made for the person you’re becoming.</span></footer>
-  </div>
-  <div class="quote-toast" id="quoteToast" role="status" aria-live="polite" aria-hidden="true"></div>
-  <script>
-    (()=>{
-      const KEY='daymark-90-v1', TOTAL=90, MS_DAY=86400000;
-      const $=id=>document.getElementById(id);
-      const today=new Date();today.setHours(0,0,0,0);
-      const iso=d=>{const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${day}`};
-      const parse=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
-      const addDays=(d,n)=>{const v=new Date(d);v.setDate(v.getDate()+n);return v};
-      const dateLabel=d=>new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric'}).format(d);
-      const quoteSubjects=['Today’s effort','A small daily action','The promise you keep','Your choice to begin','An ordinary day of practice','One honest attempt','The habit you nurture','A moment of focus','The work you do today','A quiet bit of progress'];
-      const quoteEndings=['moves you closer to the life you want.','makes self-trust a little stronger.','turns intention into action.','gives tomorrow a better starting point.','builds momentum quietly.','keeps your goal within reach.','proves consistency can start small.','helps you become who you hope to be.','makes progress possible, one day at a time.'];
-      const quotes=quoteSubjects.flatMap(subject=>quoteEndings.map(ending=>`${subject} ${ending}`));
-      let quoteTimer;
-      const store={habit:'My Daily Habit',start:'2026-10-04',completed:[]};
-      try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved&&typeof saved==='object'){if(typeof saved.habit==='string')store.habit=saved.habit;if(typeof saved.start==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(saved.start))store.start=saved.start;if(Array.isArray(saved.completed))store.completed=[...new Set(saved.completed.filter(n=>Number.isInteger(n)&&n>=0&&n<TOTAL))]}}catch{}
-      function save(){try{localStorage.setItem(KEY,JSON.stringify(store))}catch{}}
-      function build(){
-        const start=parse(store.start), end=addDays(start,TOTAL-1), nowIndex=Math.floor((today-start)/MS_DAY);
-        $('habitName').value=store.habit;$('startDate').value=store.start;
-        $('dateRange').textContent=`${dateLabel(start)} — ${dateLabel(end)} · 90 days`;
-        $('calendarSub').textContent='Tap once to complete a day. Completed days stay checked.';
-        const weeks=$('weeks');weeks.replaceChildren();let currentWeek=null,prevMonth=-1;
-        for(let i=0;i<TOTAL;i++){
-          if(i%7===0){currentWeek=document.createElement('div');currentWeek.className='week';currentWeek.setAttribute('role','group');currentWeek.setAttribute('aria-label',`Week ${Math.floor(i/7)+1}`);const label=document.createElement('div');label.className='week-label';label.textContent=`W${String(Math.floor(i/7)+1).padStart(2,'0')}`;currentWeek.append(label);weeks.append(currentWeek)}
-          const d=addDays(start,i),month=d.getMonth(),completed=store.completed.includes(i);
-          if(month!==prevMonth){const tag=document.createElement('div');tag.className='month-tag visible';tag.style.gridColumn='2 / -1';tag.textContent=new Intl.DateTimeFormat(undefined,{month:'long',year:'numeric'}).format(d);currentWeek.append(tag);prevMonth=month}
-          const cell=document.createElement('div');cell.className='day';const wd=document.createElement('span');wd.className='day-name';wd.textContent=new Intl.DateTimeFormat(undefined,{weekday:'short'}).format(d);const b=document.createElement('button');b.type='button';b.setAttribute('role','checkbox');b.setAttribute('aria-checked',completed);b.setAttribute('aria-label',`Day ${i+1}, ${new Intl.DateTimeFormat(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'}).format(d)}${completed?', completed and locked':''}`);b.dataset.index=i;b.disabled=completed;
-          const isToday=iso(d)===iso(today), future=iso(d)>iso(today), missed=iso(d)<iso(today);b.className=completed?'completed':'';if(isToday)b.classList.add('today');if(future)b.classList.add('future');if(missed&&!completed)b.classList.add('missed');if(nowIndex<0||nowIndex>=TOTAL)b.classList.add('future');
-          b.innerHTML=`<span class="num">${d.getDate()}</span><svg class="check" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m4 10 4 4 8-8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-          b.addEventListener('click',()=>{const idx=Number(b.dataset.index);if(store.completed.includes(idx))return;store.completed.push(idx);save();showQuote(store.completed.length);build()});cell.append(wd,b);currentWeek.append(cell);
-        }
-        const count=store.completed.length,pct=Math.round(count/TOTAL*100);$('completedStat').innerHTML=`${count} <small>/ 90</small>`;$('currentStat').innerHTML=`${currentStreak(start,nowIndex)} <small>days</small>`;$('longestStat').innerHTML=`${longestStreak()} <small>days</small>`;$('remainingStat').innerHTML=`${TOTAL-count} <small>left</small>`;$('ringNumber').textContent=`${pct}%`;$('ringFill').style.strokeDashoffset=String(125.66*(1-count/TOTAL));
-        $('encouragement').textContent=message(count,nowIndex);$('habitName').value=store.habit;
-      }
-      function currentStreak(start,idx){let at=idx;if(at>=TOTAL)at=TOTAL-1;if(at<0)return 0;if(store.completed.includes(at)){}else at--;let n=0;while(at>=0&&store.completed.includes(at)){n++;at--}return n}
-      function longestStreak(){let best=0,run=0;for(let i=0;i<TOTAL;i++){if(store.completed.includes(i)){run++;best=Math.max(best,run)}else run=0}return best}
-      function message(count,idx){if(count===TOTAL)return'90 days of showing up. Look what you made.';if(count===0)return idx<0?'Your 90-day journey begins soon.':idx>=TOTAL?'A new chapter can start whenever you’re ready.':'A fresh page. Your first check is waiting.';if(idx>=0&&idx<TOTAL&&store.completed.includes(idx))return'Today, you showed up for yourself. That counts.';if(count>=60)return'You’ve built something real. Keep going.';if(count>=30)return'A month of small promises is adding up.';if(count>=7)return'One week at a time. You’re finding your rhythm.';return'Every check is proof that you showed up.'}
-      function showQuote(completedCount){const toast=$('quoteToast');toast.textContent=quotes[(completedCount-1)%quotes.length];toast.classList.add('show');toast.setAttribute('aria-hidden','false');clearTimeout(quoteTimer);quoteTimer=setTimeout(()=>{toast.classList.remove('show');toast.setAttribute('aria-hidden','true')},30000)}
-      $('habitName').addEventListener('input',e=>{store.habit=e.target.value;save()});$('habitName').addEventListener('change',build);
-      $('startDate').addEventListener('change',e=>{if(!e.target.value)return;store.start=e.target.value;save();build()});
-      $('resetButton').addEventListener('click',()=>{if(window.confirm('Clear all 90 days of progress? This cannot be undone.')){store.completed=[];save();build()}});
-      build();
-    })();
-  </script>
-</body>
-</html>
